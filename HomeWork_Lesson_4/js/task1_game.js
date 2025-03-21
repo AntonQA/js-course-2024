@@ -6,58 +6,63 @@ for (let i = 0; i < 3; i++) { // game has 3 rounds
 
     function getValue(message) {
         while (true) {
-            let value = prompt(message);
-            let isValid = (value !== "" && value !== null) && (value.toLowerCase() == "rock" || value.toLowerCase() == "paper" || value.toLowerCase() == "scissors");
+            let value = prompt(message).trim();
+            let isValid = (value !== "" && value !== null) && (value.toLowerCase() == "rock" || value.toLowerCase() == "paper" || value.toLowerCase() == "scissors" || value.toLowerCase() == "exit");
             console.log(value);
             if (isValid) {
                 return value.toLowerCase();
-            } else if (value == null) {
-                // do nothing when user clicks Cancel on modal dialog
-            } else if (value.toLowerCase() == "exit") {
-                i = 3;
-                break;
+            } else if (value == "") {
+                alert("Empty value is not allowed");
             }
-
         }
     }
 
-    let userChoise = getValue(`Enter "Rock", "Paper" or "Scissors".\nEnter "Exit" to quit the game.`);
+    let userChoice = getValue(`Enter "Rock", "Paper" or "Scissors".\nEnter "Exit" to quit the game.`);
+    console.log(userChoice);
 
-    let computerChoise;
+    let computerChoice;
     let randomNumber = Math.floor(Math.random() * 100);
     if (randomNumber <= 33) {
-        computerChoise = "rock";
+        computerChoice = "rock";
     } else if (randomNumber <= 66) {
-        computerChoise = "paper";
+        computerChoice = "paper";
     } else if (randomNumber <= 99) {
-        computerChoise = "scissors";
+        computerChoice = "scissors";
     }
 
 
-    let compWins = (userChoise == "rock" && computerChoise == "paper") ||
-        (userChoise == "paper" && computerChoise == "scissors") ||
-        (userChoise == "scissors" && computerChoise == "rock");
+    function getResult(a, b) {
+        if (a === b) {
+            return 'draw';
+        }
+
+        const winConditions = {
+            rock: 'scissors',
+            paper: 'rock',
+            scissors: 'paper',
+            exit: 'exit'
+        };
+
+        return winConditions[a] === b ? 'user' : winConditions[a] === 'exit' ? 'exit' : 'computer';
+    }
+
+    let res = getResult(userChoice, computerChoice);
 
 
-    let userWins = (userChoise == "rock" && computerChoise == "scissors") ||
-        (userChoise == "paper" && computerChoise == "rock") ||
-        (userChoise == "scissors" && computerChoise == "paper");
-
-    let drawResult = (userChoise == computerChoise);
-
-
-    if (compWins) {
+    if (res == 'computer') {
         computerScore += 1;
-        alert(`User says "${userChoise}". Computer says "${computerChoise}". Result: Computer wins!`);
-    } else if (userWins) {
+        alert(`User says "${userChoice}". Computer says "${computerChoice}". Result: Computer wins!`);
+    } else if (res == 'user') {
         userScore += 1;
-        alert(`User says "${userChoise}". Computer says "${computerChoise}". Result: User wins!`);
-    } else if (drawResult) {
+        alert(`User says "${userChoice}". Computer says "${computerChoice}". Result: User wins!`);
+    } else if (res == 'draw') {
         drawScore += 1;
-        alert(`User says "${userChoise}". Computer says "${computerChoise}". Result: it's a draw`);
+        alert(`User says "${userChoice}". Computer says "${computerChoice}". Result: it's a draw`);
     }
 
-    alert(`User score: ${userScore} \nComputer score: ${computerScore} \nDraw: ${drawScore}`);
+    if (userChoice != 'exit') {
+        alert(`User score: ${userScore} \nComputer score: ${computerScore} \nDraw: ${drawScore}`);
+    } else { i = 3 }
 
     if (i >= 2) {
         alert("Game Over! \nTo re-start press F5 button.");

@@ -20,30 +20,73 @@ for (let i = 0; i < 4; i++) {
     let value3 = Math.floor(Math.random() * 100) + 1;  //generates from 1 to 100
 
     let result;
+
+    let equationDisplay = function showEquation(sign) {
+        switch (sign) {
+            case "+":
+                alert(`${value1} + ${value2}`);
+                break;
+            case "-":
+                alert(`${value1} - ${value2}`);
+                break;
+            case "*":
+                alert(`${value1} * ${value2}`);
+                break;
+            case "/":
+                alert(`${value1} / ${value2}`);
+                break;
+        }
+    }
+
+    let feedbackToUser = function info(value) {
+        switch (value) {
+            case "correct":
+                alert("Congratulations! Correct answer!");
+                break;
+            case "wrong":
+                alert("Not Correct. Try again.");
+                break;
+            case "wrong finish":
+                alert("Sorry, it's been your last trial. See the next equation.");
+                break;
+        }
+    }
+
+
     if (value3 <= 25) {
-        alert(`${value1} + ${value2}`);
+        equationDisplay("+");
         result = value1 + value2;
     } else if (value3 <= 50) {
-        alert(`${value1} - ${value2}`);
+        equationDisplay("-");
         result = value1 - value2;
     } else if (value3 <= 75) {
-        alert(`${value1} * ${value2}`);
+        equationDisplay("*");
         result = value1 * value2;
     } else if (value3 <= 100) {
-        alert(`${value1} / ${value2}`);
+        equationDisplay("/");
         result = (value1 / value2).toFixed(1);
     }
-    
+
     for (k = 0; k < 3; k++) {
+
         let userAnswr = getAnswr("Enter your answer");
+
         if (userAnswr == result) {
             correctScore = correctScore + 1;
-            alert("Congratulations! Correct answer!");
+            feedbackToUser("correct");
             break;
         } else {
+
             wrongScore = wrongScore + 1;
-            alert("Not Correct. Try again.");
+
+            if (k >= 2) {
+                feedbackToUser("wrong finish");
+            } else { 
+                feedbackToUser("wrong");
+            }
+
         }
+
     }
 
 }
